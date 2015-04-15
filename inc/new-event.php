@@ -60,7 +60,7 @@
 
   <?php
   // load the API Client library
-  include "F:/www/www/clients/wp_lab/html/iwpserver/htdocs/wordpress/wp-content/plugins/dk-events/libraries/eventbrite/Eventbrite.php";
+  include dirname(dirname(__FILE__)) . '/libraries/eventbrite/Eventbrite.php';
 
   // Initialize the API client
   //  Eventbrite API / Application key (REQUIRED)
