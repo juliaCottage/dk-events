@@ -3,7 +3,7 @@
 Plugin Name:       Klein New Media Events
 Plugin URI:        https://github.com/juliaCottage/dk-events
 Description:       Events Plugin for Klein New Media Sites
-Version:           0.0.6
+Version:           0.0.7
 Author:            Klein New Media
 Author URI:        http://kleinnewmedia.com
 License:           GNU General Public License v2
@@ -41,5 +41,5 @@ function dk_events_render_admin() {
 }
 
 function dk_events_render_create_event() {
-include plugins_url('/inc/new-event.php', __FILE__ );
+include dirname(dirname(__FILE__)) . '/dk-events/inc/new-event.php';
 }
