@@ -116,7 +116,8 @@ $user_key = '1423494773134672332572'; ?>
       'privacy' => $privacy,  // zero for private (not available in search), 1 for public (available in search)
       'timezone' => $zone,
       'capacity' => $capacity,
-      'status' => 'live'
+      'status' => 'live',
+      'url' => $url
       );
 
   // initialize the API client
