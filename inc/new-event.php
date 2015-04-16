@@ -42,6 +42,12 @@ $user_key = '1423494773134672332572'; ?>
           </td>
         </tr>
         <tr>
+          <th scope="row"><label for="capacity">Capacity*</label></th>
+          <td><input id="capacity" type="number" name="quantity" min="1" name="capacity"/>
+            <p class="description">The maximum number of people who can attend the event.</p>
+          </td>
+        </tr>
+        <tr>
           <th scope="row"><label for="zone">Time Zone*</label></th>
           <td><input id="zone" type="text" name="zone" value="<?php echo get_option('timezone_string'); ?>" />
             <p class="description">Specify a time zone.</p>
@@ -60,9 +66,9 @@ $user_key = '1423494773134672332572'; ?>
           </td>
         </tr>
         <tr>
-          <th scope="row"><label for="description">URL</label></th>
+          <th scope="row"><label for="description">Event URL</label></th>
           <td><input id="url" type="text" name="url" />
-            <p class="description">Enter a custom URL for your event.</p>
+            <p class="description">If you pass “testevent”, the event will be accessible at “http://testevent.eventbrite.com”.</p>
           </td>
         </tr>
       </tbody>
@@ -111,7 +117,9 @@ $user_key = '1423494773134672332572'; ?>
       'start_date' => $start_date, // "YYYY-MM-DD HH:MM:SS"
       'end_date' => $end_date, // "YYYY-MM-DD HH:MM:SS"
       'privacy' => $privacy,  // zero for private (not available in search), 1 for public (available in search)
-      'timezone' => $zone
+      'timezone' => $zone,
+      'capacity' => $capacity,
+      'status' => 'live'
       );
 
   // initialize the API client
