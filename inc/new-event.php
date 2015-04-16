@@ -94,11 +94,6 @@ $user_key = '1423494773134672332572'; ?>
    $capacity = test_input($_POST["capacity"]);
    $zone = test_input($_POST["zone"]);
    $privacy = test_input($_POST["privacy"]);
-   if ( isset( $privacy ) ) {
-    $privacy = 0;
-  } else {
-    $privacy = 1;
-  }
    $url = test_input($_POST["url"]);
  }
 
@@ -118,8 +113,8 @@ $user_key = '1423494773134672332572'; ?>
     'description' => $description,
       'start_date' => $start_date, // "YYYY-MM-DD HH:MM:SS"
       'end_date' => $end_date, // "YYYY-MM-DD HH:MM:SS"
+      'privacy' => $privacy,  // zero for private (not available in search), 1 for public (available in search)
       'timezone' => $zone,
-      'privacy' =>  $privacy, // zero for private (not available in search), 1 for public (available in search)
       'capacity' => $capacity,
       'status' => 'live',
       'url' => $url
@@ -140,6 +135,6 @@ $user_key = '1423494773134672332572'; ?>
     $response = $e->error;
     echo "darn";
   }
-  print var_dump($response);
+  // print var_dump($response);
 }
 ?>
