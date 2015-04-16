@@ -1,7 +1,7 @@
 <div class="wrap">
   <h2>Create Event</h2>
 
-  <form action="../process.php" method="post" name="myForm">
+  <form action="../process.php" method="post" name="myForm" id="create-event">
 
     <table class="form-table">
       <tbody>
@@ -13,7 +13,7 @@
         </tr>
         <tr>
           <th scope="row"><label for="description">Description</label></th>
-          <td><input id="description" type="text" name="description" />
+          <td><textarea id="description" name="description" form="create-event"/></textarea>
             <p class="description">Tell people what's special about this event.</p>
           </td>
         </tr>
