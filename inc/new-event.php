@@ -43,7 +43,7 @@ $user_key = '1423494773134672332572'; ?>
         </tr>
         <tr>
           <th scope="row"><label for="capacity">Capacity*</label></th>
-          <td><input id="capacity" type="number" name="quantity" min="1" name="capacity"/>
+          <td><input id="capacity" type="number" name="capacity" min="1" name="capacity"/>
             <p class="description">The maximum number of people who can attend the event.</p>
           </td>
         </tr>
