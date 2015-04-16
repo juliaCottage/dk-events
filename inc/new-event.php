@@ -84,13 +84,14 @@ $user_key = '1423494773134672332572'; ?>
   <?php
   // define variables and set to empty values
 
-  $name = $description = $start_date = $end_date = $zone = $privacy = $url = "";
+  $name = $description = $start_date = $end_date = $capacity = $zone = $privacy = $url = "";
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $name = test_input($_POST["name"]);
    $description = test_input($_POST["description"]);
    $start_date = test_input($_POST["start-date"]);
-   $end_date = test_input($_POST["end-date"]);
+   $end_date = test_input($_POST["end-date"])
+   $capacity = test_input($_POST["capacity"]);;
    $zone = test_input($_POST["zone"]);
    $privacy = test_input($_POST["privacy"]);
    $url = test_input($_POST["url"]);
@@ -102,10 +103,6 @@ $user_key = '1423494773134672332572'; ?>
    $data = htmlspecialchars($data);
    return $data;
  }
-
-
-
-
 
  if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
