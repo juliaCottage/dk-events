@@ -93,12 +93,11 @@ $user_key = '1423494773134672332572'; ?>
    $end_date = test_input($_POST["end-date"]);
    $capacity = test_input($_POST["capacity"]);
    $zone = test_input($_POST["zone"]);
-   $privacy = test_input($_POST["privacy"]);
-   if ( isset( $privacy ) ) {
+   if( empty($_POST['privacy'] ) ) {
+      $privacy = 1;
+   } else {
     $privacy = 0;
-  } else {
-    $privacy = 1;
-  }
+   }
    $url = test_input($_POST["url"]);
  }
 
@@ -120,7 +119,7 @@ $user_key = '1423494773134672332572'; ?>
       'end_date' => $end_date, // "YYYY-MM-DD HH:MM:SS"
       'timezone' => $zone,
       'privacy' =>  $privacy, // zero for private (not available in search), 1 for public (available in search)
-      'capacity' => $capacity,
+      'capacity' => '25',
       'status' => 'live',
       'url' => $url
       );
