@@ -13,7 +13,7 @@
 <div class="wrap">
   <h2>Create Event</h2>
 
-  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" name="myForm" id="create-event">
+  <form action="" method="post" name="myForm" id="create-event">
 
     <table class="form-table">
       <tbody>
