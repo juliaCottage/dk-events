@@ -3,7 +3,7 @@
 Plugin Name:       Klein New Media Events
 Plugin URI:        https://github.com/juliaCottage/dk-events
 Description:       Events Plugin for Klein New Media Sites
-Version:           0.0.10
+Version:           0.0.12
 Author:            Klein New Media
 Author URI:        http://kleinnewmedia.com
 License:           GNU General Public License v2
@@ -12,6 +12,23 @@ Domain Path:       /languages
 Text Domain:       dk-events
 GitHub Plugin URI: https://github.com/juliaCottage/dk-events
 */
+
+function dk_events_enqueue_and_register_my_scripts(){
+  wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+
+  wp_enqueue_script( 'jquery-ui-datepicker' );
+
+  wp_enqueue_script( 'jquery-ui-slider');
+
+  wp_enqueue_style( 'jquery-ui-time-picker-css', plugins_url( '/lib/jquery-ui-timepicker/jquery-ui-timepicker-addon.css', __FILE__ ) );
+
+  wp_enqueue_script( 'jquery-ui-timepicker', plugins_url( '/lib/jquery-ui-timepicker/jquery-ui-timepicker-addon.js', __FILE__ ), array('jquery-ui-datepicker', 'jquery-ui-slider' ) );
+
+
+
+  wp_enqueue_script( 'dk-events-js', plugins_url( '/js/dk-events-dist.js', __FILE__ ), array( 'jquery-ui-timepicker' ), true );
+}
+add_action( 'admin_enqueue_scripts', 'dk_events_enqueue_and_register_my_scripts' );
 
 
 //Add settings link to 'Plugins' page
@@ -32,7 +49,6 @@ function dk_events_add_menu_page() {
 add_action( 'admin_menu', 'dk_events_add_menu_page' );
 
 //Add contextual help
-
 
 
 //Admin pages

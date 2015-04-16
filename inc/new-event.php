@@ -18,7 +18,7 @@
     <table class="form-table">
       <tbody>
         <tr>
-          <th scope="row"><label for="title">Event Title</label></th>
+          <th scope="row"><label for="title">Event Title*</label></th>
           <td><input id="name" type="text" name="name" />
             <p class="description">Give you event a short, distinct name.</p>
           </td>
@@ -30,25 +30,25 @@
           </td>
         </tr>
         <tr>
-          <th scope="row"><label for="start-date">Start Date</label></th>
-          <td><input id="start-date" type="text" name="start-date" />
+          <th scope="row"><label for="start-date">Start*</label></th>
+          <td><input id="start-date" type="text" name="start-date" class="datepicker"/>
             <p class="description">When does this event start?</p>
           </td>
         </tr>
         <tr>
-          <th scope="row"><label for="end-date">End Date</label></th>
-          <td><input id="end-date" type="text" name="end-date" />
+          <th scope="row"><label for="end-date">End*</label></th>
+          <td><input id="end-date" type="text" name="end-date" class="datepicker"/>
             <p class="description">When does it end?</p>
           </td>
         </tr>
         <tr>
-          <th scope="row"><label for="zone">Time Zone</label></th>
+          <th scope="row"><label for="zone">Time Zone*</label></th>
           <td><input id="zone" type="text" name="zone" value="<?php echo get_option('timezone_string'); ?>" />
             <p class="description">Specify a time zone.</p>
           </td>
         </tr>
         <tr>
-          <th scope="row"><label for="privacy">Privacy</label></th>
+          <th scope="row"><label for="privacy">Privacy*</label></th>
           <td><input id="privacy" type="text" name="privacy" />
             <p class="description">Should this event be private?</p>
           </td>
@@ -123,6 +123,6 @@
       $response = $e->error;
       echo "darn";
   }
-  print var_dump($response);
+  // print var_dump($response);
  }
   ?>
