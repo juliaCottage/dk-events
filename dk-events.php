@@ -3,7 +3,7 @@
 Plugin Name:       Klein New Media Events
 Plugin URI:        https://github.com/juliaCottage/dk-events
 Description:       Events Plugin for Klein New Media Sites
-Version:           0.0.12
+Version:           0.0.13
 Author:            Klein New Media
 Author URI:        http://kleinnewmedia.com
 License:           GNU General Public License v2
@@ -14,7 +14,7 @@ GitHub Plugin URI: https://github.com/juliaCottage/dk-events
 */
 
 function dk_events_enqueue_and_register_my_scripts(){
-  wp_enqueue_style( 'jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
+  wp_enqueue_style( 'jquery-ui-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css' );
 
   wp_enqueue_script( 'jquery-ui-datepicker' );
 
