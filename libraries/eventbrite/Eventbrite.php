@@ -27,7 +27,7 @@ class Eventbrite {
                 $this->auth_tokens = $tokens;
             }
         }else{
-            $this->auth_tokens['app_key'] = $tokens;
+            $this->auth_tokens['token'] = $tokens;
             if( $password ){
                 $this->auth_tokens['user'] = $user;
                 $this->auth_tokens['password'] = $password;
@@ -41,7 +41,7 @@ class Eventbrite {
     function oauth_handshake( $tokens ){
         $params = array(
             'grant_type'=>'authorization_code',
-            'client_id'=> $tokens['app_key'],
+            'client_id'=> $tokens['token'],
             'client_secret'=> $tokens['client_secret'],
             'code'=> $tokens['access_code'] );
 
@@ -296,7 +296,7 @@ class Eventbrite {
                 $login_params = array('user_name'  => $response['user_name'],
                                       'user_email' => $response['user_email']);
             }
-            $login_params['oauth_link'] = Eventbrite::oauthNextStep($options['app_key']);
+            $login_params['oauth_link'] = Eventbrite::oauthNextStep($options['token']);
             if(isset( $response['login_error'])){
                 $login_params['login_error'] = $response['login_error'];
             }

@@ -5,10 +5,10 @@ include dirname(dirname(__FILE__)) . '/libraries/eventbrite/Eventbrite.php';
   // Initialize the API client
   //  Eventbrite API / Application key (REQUIRED)
   //   http://www.eventbrite.com/api/key/
-$api_key = 'E47AYMF35YRIXKWX2S';
+$token = 'E47AYMF35YRIXKWX2S';
   //  Eventbrite user_key (OPTIONAL, only needed for reading/writing private user data)
   //   http://www.eventbrite.com/userkeyapi
-$client_id = '1423494773134672332572';
+$client_id = '';
 
 
 ?>
@@ -131,8 +131,8 @@ $client_id = '1423494773134672332572';
       );
 
   // initialize the API client
-  $eb_client = new Eventbrite(array('app_key'  => $api_key,
-    'user_key' => $user_key));
+  $eb_client = new Eventbrite(array('app_key'  => $token,
+    'client_id' => $client_id));
   // Create your event:
   try{
       // http_post_fields("https://www.eventbriteapi.com/v3/events/",$eb_client->event_new($event_new_params)->event);
