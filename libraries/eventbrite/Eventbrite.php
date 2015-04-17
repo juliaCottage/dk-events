@@ -3,15 +3,14 @@ class Eventbrite {
     /**
      * Eventbrite API endpoint
      */
-    var $api_endpoint = "https://www.eventbriteapi.com/v3/";
+    var $api_endpoint = "https://www.eventbrite.com/json/";
     var $auth_tokens;
     var $api_url;
-
     /**
      * Eventbrite API key (REQUIRED)
-     *    https://www.eventbrite.com/api/key/
+     *    http://www.eventbrite.com/api/key/
      * Eventbrite user_key (OPTIONAL, only needed for reading/writing private user data)
-     *     https://www.eventbrite.com/userkeyapi
+     *     http://www.eventbrite.com/userkeyapi
      *
      * Alternate authorization parameters (instead of user_key):
      *   Eventbrite user email
@@ -27,33 +26,29 @@ class Eventbrite {
                 $this->auth_tokens = $tokens;
             }
         }else{
-            $this->auth_tokens['token'] = $tokens;
+            $this->auth_tokens['app_key'] = $tokens;
             if( $password ){
                 $this->auth_tokens['user'] = $user;
                 $this->auth_tokens['password'] = $password;
             }
             else {
-              $this->auth_tokens['client_id'] = $user;
+              $this->auth_tokens['user_key'] = $user;
             }
         }
     }
-
     function oauth_handshake( $tokens ){
         $params = array(
             'grant_type'=>'authorization_code',
-            'client_id'=> $tokens['token'],
+            'client_id'=> $tokens['app_key'],
             'client_secret'=> $tokens['client_secret'],
             'code'=> $tokens['access_code'] );
-
         $request_url = $this->api_url['scheme'] . "://" . $this->api_url['host'] . '/oauth/token';
-
         // TODO: Replace the cURL code with something a bit more modern -
         //$context = stream_context_create(array('http' => array(
         //    'method'  => 'POST',
         //    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
         //    'content' => http_build_query($params))));
         //$json_data = file_get_contents( $request_url, false, $context );
-
         // CURL-POST implementation -
         // WARNING: This code may require you to install the php5-curl package
         $ch = curl_init();
@@ -65,15 +60,13 @@ class Eventbrite {
         $json_data = curl_exec($ch);
         $resp_info = curl_getinfo($ch);
         curl_close($ch);
-
         $response = get_object_vars(json_decode($json_data));
         if( !array_key_exists('access_token', $response) || array_key_exists('error', $response) ){
             throw new Exception( $response['error_description'] );
         }
         return array_merge($tokens, $response);
     }
-
-    // For information about available API methods, see: https://developer.eventbrite.com/doc/
+    // For information about available API methods, see: http://developer.eventbrite.com/doc/
     function __call( $method, $args ) {
         // Unpack our arguments
         if( is_array( $args ) && array_key_exists( 0, $args ) && is_array( $args[0]) ){
@@ -81,15 +74,12 @@ class Eventbrite {
         }else{
             $params = array();
         }
-
         // Add authentication tokens to querystring
         if(!isset($this->auth_tokens['access_token'])){
             $params = array_merge($params, $this->auth_tokens);
         }
-
         // Build our request url, urlencode querystring params
-        $request_url = $this->api_url['scheme']."://".$this->api_url['host'].$this->api_url['path'].$method.'/?'.http_build_query( $params,'','&');
-
+        $request_url = $this->api_url['scheme']."://".$this->api_url['host'].$this->api_url['path'].$method.'?'.http_build_query( $params,'','&');
         // Call the API
         if(!isset($this->auth_tokens['access_token'])){
             $resp = file_get_contents( $request_url );
@@ -100,18 +90,15 @@ class Eventbrite {
             );
             $resp = file_get_contents( $request_url, false, stream_context_create($options));
         }
-
         // parse our response
         if($resp){
             $resp = json_decode( $resp );
-
             if( isset( $resp->error ) && isset($resp->error->error_message) ){
                 throw new Exception( $resp->error->error_message );
             }
         }
         return $resp;
     }
-
     /*
      * Helpers:
      */
@@ -143,7 +130,6 @@ class Eventbrite {
                 }
             }
         }
-
         # We do not have a valid access token for this user so far
         if( $user == false ){
             # This user is not yet authenticated -
@@ -179,7 +165,6 @@ class Eventbrite {
         }
         return $response;
     }
-
     public static function widgetHTML( $params ){
     // Replace this example with something that works with your Application's templating engine
         $html = "<div class='eb_login_widget'> <h2>Eventbrite Account Access</h2>";
@@ -187,7 +172,6 @@ class Eventbrite {
             $html .= "<div><h3>Welcome Back!</h3>";
             $html .= "<p>You are logged in as:<br/>{$params['user_name']}<br/><i>({$params['user_email']})</i></p>";
             $html .= "<p><a class='button' href='{$params['logout_link']}'>Logout</a></p></div>";
-
         }elseif( isset($params['oauth_link']) ){
             if(isset($params['login_error'])){
                 $html .= "<p class='error'>{$params['login_error']}</p>";
@@ -199,11 +183,9 @@ class Eventbrite {
         $html .= "</div>";
         return $html;
     }
-
     public static function oauthNextStep( $key ) {
         return 'https://www.eventbrite.com/oauth/authorize?response_type=code&client_id='.$key;
     }
-
     public static function eventList($evnts= array(), $callback='eventListRow', $options=false) {
         $html='<div class="eb_event_list">';
         if( isset($evnts->events)){
@@ -229,7 +211,6 @@ class Eventbrite {
         }
         return $html . "</div>";
     }
-
     public static function getAccessToken( ) {
         if(isset($_SESSION['EB_OAUTH_ACCESS_TOKEN'])){
             return $_SESSION['EB_OAUTH_ACCESS_TOKEN'];
@@ -237,24 +218,20 @@ class Eventbrite {
             return null;
         }
     }
-
     public static function saveAccessToken( $access_token ) {
         // this function should save the existing user's access_token.
         $_SESSION['EB_OAUTH_ACCESS_TOKEN'] = $access_token;
     }
-
     public static function deleteAccessToken( ) {
         // this function should remove the existing user's access_token.
         unset($_SESSION['EB_OAUTH_ACCESS_TOKEN']);
     }
-
     public static function eventListRow( $evnt ) {
         $time = strtotime($evnt->start_date);
         $venue_name = 'online';
         if( isset($evnt->venue) && isset( $evnt->venue->name )){
             $venue_name = $evnt->venue->name;
         }
-
         return "<div class='eb_event_list_item' id='evnt_div_" . $evnt->id ."'><span class='eb_event_list_date'>" . strftime('%a, %B %e', $time) . "</span><span class='eb_event_list_time'>" . strftime('%l:%M %P', $time) . "</span>" ."<a class='eb_event_list_title' href='".$evnt->url."'>".$evnt->title."</a><span class='eb_event_list_location'>" . $venue_name . "</span></div>\n";
     }
     /*
@@ -266,14 +243,12 @@ class Eventbrite {
           // TODO: add a way to disable this default:
           || ( isset($_GET['eb_logout'])
                && $_GET['eb_logout']=="true" )) {
-
             // clear this user's access_token -
             Eventbrite::deleteAccessToken();
             // remove our "logout=true" trigger from the querystring-
             header("Location: " . $_SERVER['PHP_SELF']);
             exit;
         }
-
         // automatically pull the access_code from the querysting?
         // TODO: add a way to disable this:
         if(!isset($options['access_code'] )){
@@ -284,11 +259,9 @@ class Eventbrite {
         if(!isset($options['error_message'])){
             $options['error_message'] = isset($_REQUEST['error']) ? $_REQUEST['error'] : null;
         }
-
         //  Check to see if we have a valid user account
         //  and Proccess any data-related work:
         $response = Eventbrite::OAuthLogin($options, $get_token, $save_token, $delete_token);
-
         //  package up the data for our view / template:
         $login_params = array();
         if( is_array($response)){
@@ -296,7 +269,7 @@ class Eventbrite {
                 $login_params = array('user_name'  => $response['user_name'],
                                       'user_email' => $response['user_email']);
             }
-            $login_params['oauth_link'] = Eventbrite::oauthNextStep($options['token']);
+            $login_params['oauth_link'] = Eventbrite::oauthNextStep($options['app_key']);
             if(isset( $response['login_error'])){
                 $login_params['login_error'] = $response['login_error'];
             }
@@ -306,7 +279,6 @@ class Eventbrite {
                 $login_params['logout_link'] = $_SERVER['PHP_SELF'] . '?eb_logout=true';
             }
         }
-
         // view related work:
         //  render your "template"
         if(is_callable($render_login_box)){
@@ -319,30 +291,23 @@ class Eventbrite {
             return $login_params;
         }
     }
-
     public static function ticketWidget( $evnt, $height='650px', $width='100%' ) {
-        return '<div style="width:100%; text-align:left;" ><iframe src="https://www.eventbrite.com/tickets-external?eid=' . $evnt->id . '&ref=etckt" frameborder="0" height="'.$height.'" width="'.$width.'" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:100%; text-align:left;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com/r/etckt" >Online Ticketing</a><span style="color:#ddd;" > for </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com/event/' . $evnt->id . '?ref=etckt" >' . $evnt->title . '</a><span style="color:#ddd;" > powered by </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com?ref=etckt" >Eventbrite</a></div></div>';
+        return '<div style="width:100%; text-align:left;" ><iframe src="http://www.eventbrite.com/tickets-external?eid=' . $evnt->id . '&ref=etckt" frameborder="0" height="'.$height.'" width="'.$width.'" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:100%; text-align:left;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com/r/etckt" >Online Ticketing</a><span style="color:#ddd;" > for </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com/event/' . $evnt->id . '?ref=etckt" >' . $evnt->title . '</a><span style="color:#ddd;" > powered by </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com?ref=etckt" >Eventbrite</a></div></div>';
     }
-
     public static function registrationWidget( $evnt ) {
-        return '<div style="width:100%; text-align:left;" ><iframe src="https://www.eventbrite.com/event/' . $evnt->id . '?ref=eweb" frameborder="0" height="1000" width="100%" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:100%; text-align:left;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com/r/eweb" >Online Ticketing</a><span style="color:#ddd;" > for </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com/event/' . $evnt->id . '?ref=eweb" >' . $evnt->title . '</a><span style="color:#ddd;" > powered by </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com?ref=eweb" >Eventbrite</a></div></div>';
-
+        return '<div style="width:100%; text-align:left;" ><iframe src="http://www.eventbrite.com/event/' . $evnt->id . '?ref=eweb" frameborder="0" height="1000" width="100%" vspace="0" hspace="0" marginheight="5" marginwidth="5" scrolling="auto" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:100%; text-align:left;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com/r/eweb" >Online Ticketing</a><span style="color:#ddd;" > for </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com/event/' . $evnt->id . '?ref=eweb" >' . $evnt->title . '</a><span style="color:#ddd;" > powered by </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com?ref=eweb" >Eventbrite</a></div></div>';
     }
-
     public static function calendarWidget( $evnt ) {
-        return '<div style="width:195px; text-align:center;" ><iframe src="https://www.eventbrite.com/calendar-widget?eid=' . $evnt->id . '" frameborder="0" height="382" width="195" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:195px; text-align:center;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com/r/ecal">Online event registration</a><span style="color:#ddd;" > powered by </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com?ref=ecal" >Eventbrite</a></div></div>';
+        return '<div style="width:195px; text-align:center;" ><iframe src="http://www.eventbrite.com/calendar-widget?eid=' . $evnt->id . '" frameborder="0" height="382" width="195" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:195px; text-align:center;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com/r/ecal">Online event registration</a><span style="color:#ddd;" > powered by </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com?ref=ecal" >Eventbrite</a></div></div>';
     }
-
     public static function countdownWidget( $evnt ) {
-        return '<div style="width:195px; text-align:center;" ><iframe src="https://www.eventbrite.com/countdown-widget?eid=' . $evnt->id . '" frameborder="0" height="479" width="195" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:195px; text-align:center;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com/r/ecount" >Online event registration</a><span style="color:#ddd;" > for </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="https://www.eventbrite.com/event/' . $evnt->id . '?ref=ecount" >' . $evnt->title . '</a></div></div>';
+        return '<div style="width:195px; text-align:center;" ><iframe src="http://www.eventbrite.com/countdown-widget?eid=' . $evnt->id . '" frameborder="0" height="479" width="195" marginheight="0" marginwidth="0" scrolling="no" allowtransparency="true"></iframe><div style="font-family:Helvetica, Arial; font-size:10px; padding:5px 0 5px; margin:2px; width:195px; text-align:center;" ><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com/r/ecount" >Online event registration</a><span style="color:#ddd;" > for </span><a style="color:#ddd; text-decoration:none;" target="_blank" href="http://www.eventbrite.com/event/' . $evnt->id . '?ref=ecount" >' . $evnt->title . '</a></div></div>';
     }
-
     public static function buttonWidget( $evnt ) {
-        return '<a href="https://www.eventbrite.com/event/' . $evnt->id . '?ref=ebtn" target="_blank"><img border="0" src="https://www.eventbrite.com/custombutton?eid=' . $evnt->id . '" alt="Register for ' . $evnt->title . ' on Eventbrite" /></a>';
+        return '<a href="http://www.eventbrite.com/event/' . $evnt->id . '?ref=ebtn" target="_blank"><img border="0" src="http://www.eventbrite.com/custombutton?eid=' . $evnt->id . '" alt="Register for ' . $evnt->title . ' on Eventbrite" /></a>';
     }
-
     public static function linkWidget( $evnt, $text=null, $color=null ) {
-        return '<a href="https://www.eventbrite.com/event/' . $evnt->id . '?ref=elink" target="_blank" style="color:' . ( $color ? $color : "#000000" ) . ';">' . ( $text ? $text : $evnt->title ) . '</a>';
+        return '<a href="http://www.eventbrite.com/event/' . $evnt->id . '?ref=elink" target="_blank" style="color:' . ( $color ? $color : "#000000" ) . ';">' . ( $text ? $text : $evnt->title ) . '</a>';
     }
 };
 ?>
