@@ -8,7 +8,10 @@ include dirname(dirname(__FILE__)) . '/libraries/eventbrite/Eventbrite.php';
 $api_key = 'E47AYMF35YRIXKWX2S';
   //  Eventbrite user_key (OPTIONAL, only needed for reading/writing private user data)
   //   http://www.eventbrite.com/userkeyapi
-$user_key = '1423494773134672332572'; ?>
+$client_id = '1423494773134672332572';
+
+
+?>
 
 <div class="wrap">
   <h2>Create Event</h2>
@@ -114,12 +117,15 @@ $user_key = '1423494773134672332572'; ?>
   // description of the available event_update parameters:
   $event_new_params = array(
     'event.name.html' => $name,
-    // 'description' => $description,
-      'event.start' => $start_date, // "YYYY-MM-DD HH:MM:SS"
-      'event.end' => $end_date, // "YYYY-MM-DD HH:MM:SS"
+    'event.description' => $description,
+      'event.start.utc' => $start_date, // "YYYY-MM-DD HH:MM:SS"
+  'event.start.timezone' => 'America/Denver',
+      'event.end.utc' => $end_date, // "YYYY-MM-DD HH:MM:SS"
+      'event.end.timezone' => 'America/Denver',
       // 'timezone' => $zone,
       'event.listed' =>  FALSE, // zero for private (not available in search), 1 for public (available in search)
       'event.capacity' => $capacity,
+      'event.currency' => 'USD',
       'event.status' => 'live',
       'event.url' => $url
       );
@@ -132,7 +138,7 @@ $user_key = '1423494773134672332572'; ?>
       // http_post_fields("https://www.eventbriteapi.com/v3/events/",$eb_client->event_new($event_new_params)->event);
       // For more information about the API calls that are available
       // on Eventbrite API clients, see http://developer.eventbrite.com/doc/
-    $response = $eb_client->event_new($event_new_params);
+    $response = $eb_client->events($event_new_params);
     echo "hurray";
   }catch( Exception $e ){
       // application-specific error handling goes here:

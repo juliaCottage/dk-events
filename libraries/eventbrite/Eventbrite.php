@@ -33,7 +33,7 @@ class Eventbrite {
                 $this->auth_tokens['password'] = $password;
             }
             else {
-              $this->auth_tokens['user_key'] = $user;
+              $this->auth_tokens['client_id'] = $user;
             }
         }
     }
