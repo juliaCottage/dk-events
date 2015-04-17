@@ -131,7 +131,7 @@ $client_id = '';
       );
 
   // initialize the API client
-  $eb_client = new Eventbrite(array('app_key'  => $token,
+  $eb_client = new Eventbrite(array('token'  => $token,
     'client_id' => $client_id));
   // Create your event:
   try{
