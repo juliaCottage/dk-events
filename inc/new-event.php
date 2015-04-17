@@ -132,7 +132,7 @@ $user_key = '1423494773134672332572'; ?>
       // http_post_fields("https://www.eventbriteapi.com/v3/events/",$eb_client->event_new($event_new_params)->event);
       // For more information about the API calls that are available
       // on Eventbrite API clients, see http://developer.eventbrite.com/doc/
-    $response = $eb_client->event_new($event_new_params)->event;
+    $response = $eb_client->event($event_new_params)->event;
     echo "hurray";
   }catch( Exception $e ){
       // application-specific error handling goes here:
