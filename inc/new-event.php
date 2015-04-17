@@ -113,15 +113,15 @@ $user_key = '1423494773134672332572'; ?>
   //see http://developer.eventbrite.com/doc/events/event_update/ for a
   // description of the available event_update parameters:
   $event_new_params = array(
-    'title' => $name,
-    'description' => $description,
-      'start_date' => $start_date, // "YYYY-MM-DD HH:MM:SS"
-      'end_date' => $end_date, // "YYYY-MM-DD HH:MM:SS"
-      'timezone' => $zone,
-      'privacy' =>  $privacy, // zero for private (not available in search), 1 for public (available in search)
-      'capacity' => $capacity,
-      'status' => 'live',
-      'url' => $url
+    'event.name.html' => $name,
+    // 'description' => $description,
+      'event.start' => $start_date, // "YYYY-MM-DD HH:MM:SS"
+      'event.end' => $end_date, // "YYYY-MM-DD HH:MM:SS"
+      // 'timezone' => $zone,
+      'event.listed' =>  FALSE, // zero for private (not available in search), 1 for public (available in search)
+      'event.capacity' => $capacity,
+      'event.status' => 'live',
+      'event.url' => $url
       );
 
   // initialize the API client

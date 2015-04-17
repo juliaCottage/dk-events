@@ -3,7 +3,7 @@ class Eventbrite {
     /**
      * Eventbrite API endpoint
      */
-    var $api_endpoint = "https://www.eventbrite.com/json/";
+    var $api_endpoint = "https://www.eventbriteapi.com/v3/";
     var $auth_tokens;
     var $api_url;
 
@@ -88,7 +88,7 @@ class Eventbrite {
         }
 
         // Build our request url, urlencode querystring params
-        $request_url = $this->api_url['scheme']."://".$this->api_url['host'].$this->api_url['path'].$method.'?'.http_build_query( $params,'','&');
+        $request_url = $this->api_url['scheme']."://".$this->api_url['host'].$this->api_url['path'].$method.'/?'.http_build_query( $params,'','&');
 
         // Call the API
         if(!isset($this->auth_tokens['access_token'])){
