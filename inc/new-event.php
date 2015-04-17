@@ -94,9 +94,9 @@ $user_key = '1423494773134672332572'; ?>
    $capacity = test_input($_POST["capacity"]);
    $zone = test_input($_POST["zone"]);
    if( isset($_POST['privacy'] ) ) {
-      $privacy = 0;
+      $privacy = TRUE;
    } else {
-    $privacy = 1;
+    $privacy = FALSE;
    }
    $url = test_input($_POST["url"]);
  }
@@ -113,12 +113,12 @@ $user_key = '1423494773134672332572'; ?>
   //see http://developer.eventbrite.com/doc/events/event_update/ for a
   // description of the available event_update parameters:
   $event_new_params = array(
-    'title' => $name,
+    'name' => $name,
     'description' => $description,
-      'start_date' => $start_date, // "YYYY-MM-DD HH:MM:SS"
-      'end_date' => $end_date, // "YYYY-MM-DD HH:MM:SS"
-      'timezone' => $zone,
-      'privacy' =>  $privacy, // zero for private (not available in search), 1 for public (available in search)
+      'start' => $start_date, // "YYYY-MM-DD HH:MM:SS"
+      'end' => $end_date, // "YYYY-MM-DD HH:MM:SS"
+      // 'timezone' => $zone,
+      'listed' =>  $privacy, // zero for private (not available in search), 1 for public (available in search)
       'capacity' => $capacity,
       'status' => 'live',
       'url' => $url
@@ -132,7 +132,7 @@ $user_key = '1423494773134672332572'; ?>
       // http_post_fields("https://www.eventbriteapi.com/v3/events/",$eb_client->event_new($event_new_params)->event);
       // For more information about the API calls that are available
       // on Eventbrite API clients, see http://developer.eventbrite.com/doc/
-    $response = $eb_client->event($event_new_params)->event;
+    $response = $eb_client->events($event_new_params)->event;
     echo "hurray";
   }catch( Exception $e ){
       // application-specific error handling goes here:
