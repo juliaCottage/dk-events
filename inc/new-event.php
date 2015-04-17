@@ -94,9 +94,9 @@ $user_key = '1423494773134672332572'; ?>
    $capacity = test_input($_POST["capacity"]);
    $zone = test_input($_POST["zone"]);
    if( isset($_POST['privacy'] ) ) {
-      $privacy = TRUE;
+      $privacy = 0;
    } else {
-    $privacy = FALSE;
+    $privacy = 1;
    }
    $url = test_input($_POST["url"]);
  }
@@ -113,12 +113,12 @@ $user_key = '1423494773134672332572'; ?>
   //see http://developer.eventbrite.com/doc/events/event_update/ for a
   // description of the available event_update parameters:
   $event_new_params = array(
-    'name' => $name,
+    'title' => $name,
     'description' => $description,
-      'start' => $start_date, // "YYYY-MM-DD HH:MM:SS"
-      'end' => $end_date, // "YYYY-MM-DD HH:MM:SS"
-      // 'timezone' => $zone,
-      'listed' =>  $privacy, // zero for private (not available in search), 1 for public (available in search)
+      'start_date' => $start_date, // "YYYY-MM-DD HH:MM:SS"
+      'end_date' => $end_date, // "YYYY-MM-DD HH:MM:SS"
+      'timezone' => $zone,
+      'privacy' =>  $privacy, // zero for private (not available in search), 1 for public (available in search)
       'capacity' => $capacity,
       'status' => 'live',
       'url' => $url
